@@ -150,6 +150,8 @@ _connector_mapping_linux = {
         'os_brick.initiator.connectors.gpfs.GPFSConnector',
     initiator.VERITAS_HYPERSCALE:
         'os_brick.initiator.connectors.vrtshyperscale.HyperScaleConnector',
+    initiator.STORPOOL:
+        'os_brick.initiator.connectors.storpool.StorPoolConnector',
 }
 
 # Mapping for the S390X platform
