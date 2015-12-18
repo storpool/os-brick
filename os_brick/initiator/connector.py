@@ -143,6 +143,8 @@ _connector_mapping_linux = {
         'os_brick.initiator.connectors.vmware.VmdkConnector',
     initiator.GPFS:
         'os_brick.initiator.connectors.gpfs.GPFSConnector',
+    initiator.STORPOOL:
+        'os_brick.initiator.connectors.storpool.StorPoolConnector',
 
 }
 
