@@ -20,7 +20,7 @@ import six
 from oslo_log import log as logging
 from oslo_utils import importutils
 
-from os_brick.i18n import _, _LE
+from os_brick.i18n import _
 from os_brick import exception
 from os_brick import initiator
 from os_brick.initiator.connectors import base
@@ -43,15 +43,15 @@ class StorPoolConnector(base.BaseLinuxConnector):
                                                 *args, **kwargs)
 
         if storpool is None:
-            raise exception.BrickException(_LE(
-                'Could not import the StorPool API bindings'))
+            raise exception.BrickException(
+                'Could not import the StorPool API bindings')
 
         try:
             self._attach = spopenstack.AttachDB(log=LOG)
             self._attach.api()
         except Exception as e:
-            raise exception.BrickException(_LE(
-                'Could not initialize the StorPool API bindings: %s') % (e))
+            raise exception.BrickException(
+                'Could not initialize the StorPool API bindings: %s' % (e))
 
     def connect_volume(self, connection_properties):
         """Connect to a volume.
@@ -66,17 +66,17 @@ class StorPoolConnector(base.BaseLinuxConnector):
         """
         client_id = connection_properties.get('client_id', None)
         if client_id is None:
-            raise exception.BrickException(_LE(
-                'Invalid StorPool connection data, no client ID specified.'))
+            raise exception.BrickException(
+                'Invalid StorPool connection data, no client ID specified.')
         volume_id = connection_properties.get('volume', None)
         if volume_id is None:
-            raise exception.BrickException(_LE(
-                'Invalid StorPool connection data, no volume ID specified.'))
+            raise exception.BrickException(
+                'Invalid StorPool connection data, no volume ID specified.')
         volume = self._attach.volumeName(volume_id)
         mode = connection_properties.get('access_mode', None)
         if mode is None or mode not in ('rw', 'ro'):
-            raise exception.BrickException(_LE(
-                'Invalid access_mode specified in the connection data.'))
+            raise exception.BrickException(
+                'Invalid access_mode specified in the connection data.')
         req_id = 'brick-%s-%s' % (client_id, volume_id)
         self._attach.add(req_id, {
             'volume': volume,
@@ -105,12 +105,12 @@ class StorPoolConnector(base.BaseLinuxConnector):
         """
         client_id = connection_properties.get('client_id', None)
         if client_id is None:
-            raise exception.BrickException(_LE(
-                'Invalid StorPool connection data, no client ID specified.'))
+            raise exception.BrickException(
+                'Invalid StorPool connection data, no client ID specified.')
         volume_id = connection_properties.get('volume', None)
         if volume_id is None:
-            raise exception.BrickException(_LE(
-                'Invalid StorPool connection data, no volume ID specified.'))
+            raise exception.BrickException(
+                'Invalid StorPool connection data, no volume ID specified.')
         volume = self._attach.volumeName(volume_id)
         req_id = 'brick-%s-%s' % (client_id, volume_id)
         self._attach.sync(req_id, volume)
@@ -134,15 +134,15 @@ class StorPoolConnector(base.BaseLinuxConnector):
         """
         volume_id = connection_properties.get('volume', None)
         if volume_id is None:
-            raise exception.BrickException(_LE(
-                'Invalid StorPool connection data, no volume ID specified.'))
+            raise exception.BrickException(
+                'Invalid StorPool connection data, no volume ID specified.')
         volume = self._attach.volumeName(volume_id)
         path = '/dev/storpool/' + volume
         dpath = connection_properties.get('device_path', None)
         if dpath is not None and dpath != path:
-            raise exception.BrickException(_LE(
+            raise exception.BrickException(
                 'Internal error: StorPool volume path {path} does not '
-                'match device path {dpath}'),
+                'match device path {dpath}',
                 {path: path, dpath: dpath})
         return [path]
 
@@ -204,8 +204,8 @@ class StorPoolConnector(base.BaseLinuxConnector):
         # TODO(pp): query the API to see if this is really the case
         volume_id = connection_properties.get('volume', None)
         if volume_id is None:
-            raise exception.BrickException(_LE(
-                'Invalid StorPool connection data, no volume ID specified.'))
+            raise exception.BrickException(
+                'Invalid StorPool connection data, no volume ID specified.')
         volume = self._attach.volumeName(volume_id)
         path = '/dev/storpool/' + volume
         return self._get_device_size(path)
