@@ -88,7 +88,8 @@ class StorPoolConnector(base.BaseLinuxConnector):
         self._attach.sync(req_id, None)
         return {'type': 'block', 'path': '/dev/storpool/' + volume}
 
-    def disconnect_volume(self, connection_properties, device_info):
+    def disconnect_volume(self, connection_properties, device_info,
+                          force=False, ignore_errors=False):
         """Disconnect a volume from the local host.
 
         The connection_properties are the same as from connect_volume.
@@ -102,6 +103,16 @@ class StorPoolConnector(base.BaseLinuxConnector):
         :type connection_properties: dict
         :param device_info: historical difference, but same as connection_props
         :type device_info: dict
+        :param force: Whether to forcefully disconnect even if flush fails.
+                      For StorPool, this parameter is ignored, the volume is
+                      always detached.
+        :type force: bool
+        :param ignore_errors: When force is True, this will decide whether to
+                              ignore errors or raise an exception once finished
+                              the operation.  Default is False.
+                              For StorPool, this parameter is ignored,
+                              no exception is raised except on unexpected errors.
+        :type ignore_errors: bool
         """
         client_id = connection_properties.get('client_id', None)
         if client_id is None:
